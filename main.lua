@@ -2,7 +2,12 @@ local GameScreen = require("game.GameScreen")
 
 function love.load()
   love.physics.setMeter(1)
+
+  -- Work-around game hanging while mouse is pressed in LÖVE 11.3
+  love.event.pump()
+
   love.mouse.setRelativeMode(true)
+
   screen = GameScreen.new()
 end
 

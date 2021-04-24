@@ -1,3 +1,4 @@
+local Block = require("game.Block")
 local Class = require("game.Class")
 local Minecart = require("game.Minecart")
 local physics = require("game.physics")
@@ -18,12 +19,53 @@ function M:init(config)
   self.accumulatedMouseDy = 0
 
   self.players = {}
+  self.drills = {}
 
   self.world = love.physics.newWorld(gravityX, gravityY)
   self.nextGroupIndex = 1
-  self.terrain = Terrain.new(self, {})
+  -- self.terrain = Terrain.new(self, {})
+
+  -- for _ = 1, 10 do
+  --   self:generateBlock()
+  -- end
+
+  Block.new(self, {
+    vertices = {
+      -10, 0,
+      10, 0,
+      10, 10,
+      -10, 10,
+    },
+
+    angle = love.math.random() * 2 * math.pi,
+  })
 
   Player.new(self, {})
+end
+
+function M:generateBlock()
+  local vertices = {}
+  local radius = 1 + love.math.random() * 4
+  local vertexCount = 8
+  local originAngle = love.math.random() * 2 * math.pi
+
+  local centerX = love.math.random() * 20 - 10
+  local centerY = 5 + (love.math.random() * 2 - 1) * (5 - radius)
+
+  for i = 1, vertexCount do
+    local vertexAngle = originAngle + (i - 1 + love.math.random()) / vertexCount * 2 * math.pi
+
+    local vertexX = centerX + math.cos(vertexAngle) * radius
+    local vertexY = centerY + math.sin(vertexAngle) * radius
+
+    table.insert(vertices, vertexX)
+    table.insert(vertices, vertexY)
+  end
+
+  Block.new(self, {
+    vertices = vertices,
+    angle = love.math.random() * 2 * math.pi,
+  })
 end
 
 function M:generateGroupIndex()
@@ -45,6 +87,9 @@ function M:fixedUpdateInput(dt)
 end
 
 function M:fixedUpdateControl(dt)
+  for drill in pairs(self.drills) do
+    drill:fixedUpdateControl(dt)
+  end
 end
 
 function M:draw()

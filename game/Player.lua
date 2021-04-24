@@ -53,7 +53,7 @@ function M:fixedUpdateInput(dt)
       self.minecart.drill.targetY = self.minecart.drill.targetY * self.minecart.drill.maxDistance
     end
 
-    self.minecart.drill:updateJoints()
+    self.minecart.drill.drilling = love.mouse.isDown(1)
   end
 end
 

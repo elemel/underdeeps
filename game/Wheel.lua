@@ -28,7 +28,7 @@ function M:init(minecart, config)
 
   self.joint = love.physics.newWheelJoint(self.minecart.body, self.body, worldX, worldY, worldAxisX, worldAxisY)
   self.joint:setMotorEnabled(true)
-  self.joint:setMaxMotorTorque(10)
+  self.joint:setMaxMotorTorque(20)
 
   self.joint:setSpringFrequency(10)
   self.joint:setSpringDampingRatio(1)
