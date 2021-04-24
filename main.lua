@@ -2,6 +2,7 @@ local GameScreen = require("game.GameScreen")
 
 function love.load()
   love.physics.setMeter(1)
+  love.mouse.setRelativeMode(true)
   screen = GameScreen.new()
 end
 
@@ -15,4 +16,8 @@ end
 
 function love.update(dt)
   screen:update(dt)
+end
+
+function love.mousemoved(x, y, dx, dy, istouch)
+  screen:mousemoved(x, y, dx, dy, istouch)
 end

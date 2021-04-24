@@ -16,9 +16,11 @@ function M:init(minecart, config)
 
   self.radius = config.radius or 0.5
   local shape = love.physics.newCircleShape(self.radius)
-  self.fixture = love.physics.newFixture(self.body, shape)
+  local density = config.density or 0.5
+  self.fixture = love.physics.newFixture(self.body, shape, density)
+  self.fixture:setGroupIndex(-self.minecart.groupIndex)
 
-  local friction = config.friction or 2
+  local friction = config.friction or 5
   self.fixture:setFriction(friction)
 
   local axisX, axisY = unpack(config.axis or {0, -1})

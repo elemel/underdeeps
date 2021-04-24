@@ -8,18 +8,28 @@ local M = Class.new()
 
 function M:init(config)
   local gravityX = config.gravityX or 0
-  local gravityY = config.gravityY or 10
+  local gravityY = config.gravityY or 20
 
   self.fixedDt = config.fixedDt or 1 / 60
   self.accumulatedDt = 0
   self.tick = 0
 
+  self.accumulatedMouseDx = 0
+  self.accumulatedMouseDy = 0
+
   self.players = {}
 
   self.world = love.physics.newWorld(gravityX, gravityY)
+  self.nextGroupIndex = 1
   self.terrain = Terrain.new(self, {})
 
   Player.new(self, {})
+end
+
+function M:generateGroupIndex()
+  local groupIndex = self.nextGroupIndex
+  self.nextGroupIndex = self.nextGroupIndex + 1
+  return groupIndex
 end
 
 function M:fixedUpdate(dt)
@@ -44,6 +54,12 @@ function M:draw()
   love.graphics.scale(scale)
   love.graphics.setLineWidth(1 / scale)
   physics.debugDrawFixtures(self.world)
+  physics.debugDrawJoints(self.world)
+end
+
+function M:mousemoved(x, y, dx, dy, istouch)
+  self.accumulatedMouseDx = self.accumulatedMouseDx + dx
+  self.accumulatedMouseDy = self.accumulatedMouseDy + dy
 end
 
 function M:resize(w, h)

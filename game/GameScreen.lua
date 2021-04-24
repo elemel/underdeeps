@@ -19,4 +19,8 @@ function M:update(dt)
   self.engine:update(dt)
 end
 
+function M:mousemoved(x, y, dx, dy, istouch)
+  self.engine:mousemoved(x, y, dx, dy, istouch)
+end
+
 return M
