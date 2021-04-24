@@ -11,7 +11,7 @@ function M:init(engine, config)
   self.engine = assert(engine)
   self.engine.players[self] = true
 
-  self.mouseSensitivity = config.mouseSensitivity or 0.005
+  self.mouseSensitivity = config.mouseSensitivity or 0.002
 
   self.minecart = Minecart.new(self.engine, {
     position = {0, -1},

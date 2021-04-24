@@ -5,4 +5,5 @@ function love.conf(t)
   t.window.minheight = 600
 
   t.window.resizable = true
+  t.window.fullscreen = true
 end
