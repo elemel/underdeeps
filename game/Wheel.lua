@@ -5,6 +5,7 @@ local M = Class.new()
 function M:init(minecart, config)
   self.minecart = assert(minecart)
   self.engine = assert(self.minecart.engine)
+  config = config or {}
 
   local x, y = unpack(config.position or {0, 0})
   local worldX, worldY = self.minecart.body:getWorldPoint(x, y)

@@ -8,6 +8,7 @@ local M = Class.new()
 
 function M:init(engine, config)
   self.engine = assert(engine)
+  config = config or {}
 
   self.health = config.health or 1
 

@@ -4,10 +4,13 @@ local Minecart = require("game.Minecart")
 local physics = require("game.physics")
 local Player = require("game.Player")
 local Terrain = require("game.Terrain")
+local View = require("game.View")
 
 local M = Class.new()
 
 function M:init(config)
+  config = config or {}
+
   local gravityX = config.gravityX or 0
   local gravityY = config.gravityY or 20
 
@@ -40,7 +43,8 @@ function M:init(config)
     angle = love.math.random() * 2 * math.pi,
   })
 
-  Player.new(self, {})
+  self.view = View.new(self)
+  Player.new(self, self.view)
 end
 
 function M:generateBlock()
@@ -75,9 +79,14 @@ function M:generateGroupIndex()
 end
 
 function M:fixedUpdate(dt)
+  self.view.camera:updatePreviousTransform()
   self:fixedUpdateInput(dt)
   self:fixedUpdateControl(dt)
   self.world:update(dt)
+
+  for player in pairs(self.players) do
+    player:updateView()
+  end
 end
 
 function M:fixedUpdateInput(dt)
@@ -93,13 +102,24 @@ function M:fixedUpdateControl(dt)
 end
 
 function M:draw()
+  self:debugDraw()
+end
+
+function M:debugDraw()
+  love.graphics.push("all")
+
   local width, height = love.graphics.getDimensions()
   love.graphics.translate(0.5 * width, 0.5 * height)
   local scale = 0.05 * height
   love.graphics.scale(scale)
   love.graphics.setLineWidth(1 / scale)
+
+  love.graphics.translate(-self.view.camera.x, -self.view.camera.y)
+
   physics.debugDrawFixtures(self.world)
   physics.debugDrawJoints(self.world)
+
+  love.graphics.pop()
 end
 
 function M:mousemoved(x, y, dx, dy, istouch)
@@ -118,6 +138,8 @@ function M:update(dt)
     self.tick = self.tick + 1
     self:fixedUpdate(self.fixedDt)
   end
+
+  self.view.camera:updateInterpolatedTransform()
 end
 
 return M

@@ -7,11 +7,12 @@ local normalize2 = assert(gameMath.normalize2)
 
 local M = Class.new()
 
-function M:init(engine, config)
+function M:init(engine, view, config)
   self.engine = assert(engine)
-  self.engine.players[self] = true
-
+  self.view = assert(view)
+  config = config or {}
   self.mouseSensitivity = config.mouseSensitivity or 0.002
+  self.engine.players[self] = true
 
   self.minecart = Minecart.new(self.engine, {
     position = {0, -1},
@@ -55,6 +56,10 @@ function M:fixedUpdateInput(dt)
 
     self.minecart.drill.drilling = love.mouse.isDown(1)
   end
+end
+
+function M:updateView()
+  self.view.camera.x, self.view.camera.y = self.minecart.body:getPosition()
 end
 
 return M

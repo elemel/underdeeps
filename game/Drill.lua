@@ -8,6 +8,7 @@ local M = Class.new()
 function M:init(minecart, config)
   self.minecart = assert(minecart)
   self.engine = assert(self.minecart.engine)
+  config = config or {}
 
   self.drilling = false
 

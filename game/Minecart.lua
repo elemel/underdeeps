@@ -6,6 +6,7 @@ local M = Class.new()
 
 function M:init(engine, config)
   self.engine = assert(engine)
+  config = config or {}
 
   self.groupIndex = config.groupIndex or self.engine:generateGroupIndex()
 
